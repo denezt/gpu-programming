@@ -1,0 +1,62 @@
+#!/bin/bash
+#
+#
+#
+
+error(){
+	printf "\033[35mError:\t\033[31m%s!\033[0m\n" "${1}"
+}
+
+compile(){
+	progname="${1%.cu}"
+	if [ ! -z "${progname}" -a -e "${progname}.cu" ];
+	then
+		printf "\033[36mProcessing compilation stack...\033[0m\n"
+		/usr/local/cuda-11.1/bin/nvcc --verbose -ccbin g++ \
+		-I../../common/inc -m64 -ftz=true -gencode \
+		arch=compute_52,code=sm_52 -gencode \
+		arch=compute_60,code=sm_60 \
+		-gencode arch=compute_61,code=sm_61 \
+		-gencode arch=compute_70,code=sm_70 \
+		-gencode arch=compute_75,code=sm_75 \
+		-gencode arch=compute_80,code=sm_80 \
+		-gencode arch=compute_86,code=sm_86 \
+		-gencode arch=compute_86,code=compute_86 -o \
+		${progname} ${progname}.cu
+		printf "\033[32mCompilation is complete...\033[0m\n"
+	else
+		error "Missing or invalid filename was given"
+	fi
+}
+
+flush_all(){	
+	for f in `ls | grep -v '.cu'`;
+	do 
+		test -f "$f" && \
+		printf "Removing, %s\n" "${f}"  && \
+		rm -v "${f}"
+	done
+}
+
+help_menu(){
+	printf "Nvidia Compiler Wrapper\n"
+	printf "Set Action\t[ --action=VALUE ]\n"
+	printf "Compile Action\t[ --compile ]\n"
+	exit 0
+}
+
+
+for args in $@;
+do
+	case $args in
+		--action=*) _action=$(printf "%s\n" $args | cut -d'=' -f2);;
+		progname:*) _progname=$(printf "%s\n" $args | cut -d':' -f2);;
+		--compile) _action='compile';;
+		--flush-all) flush_all;;
+		-h|-help|--help) help_menu;;
+	esac
+done
+
+case ${_action} in
+	compile) compile ${_progname};;
+esac
