@@ -35,7 +35,7 @@ static void HandleError( cudaError_t err,
                                     __FILE__, __LINE__ ); \
                             exit( EXIT_FAILURE );}}
 
-template< typename T >
+template<typename T>
 void swap( T& a, T& b ) {
     T t = a;
     a = b;

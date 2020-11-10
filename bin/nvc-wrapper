@@ -9,6 +9,11 @@ error(){
 
 compile(){
 	progname="${1%.cu}"
+
+	if [ ! -d "builds" ];
+	then
+		mkdir -v "builds"
+	fi
 	if [ ! -z "${progname}" -a -e "${progname}.cu" ];
 	then
 		printf "\033[36mProcessing compilation stack...\033[0m\n"
@@ -22,20 +27,27 @@ compile(){
 		-gencode arch=compute_80,code=sm_80 \
 		-gencode arch=compute_86,code=sm_86 \
 		-gencode arch=compute_86,code=compute_86 -o \
-		${progname} ${progname}.cu
+		builds/${progname} ${progname}.cu
 		printf "\033[32mCompilation is complete...\033[0m\n"
 	else
 		error "Missing or invalid filename was given"
 	fi
 }
 
-flush_all(){	
-	for f in `ls | grep -v '.cu'`;
-	do 
-		test -f "$f" && \
-		printf "Removing, %s\n" "${f}"  && \
-		rm -v "${f}"
-	done
+flush_all(){
+	if [ -d "builds" ];
+	then
+		printf "Activating, Flush All compiled programs\n"
+		for f in `ls | grep -v '.cu'`;
+		do
+			test -f "$f" && \
+			printf "Removing, %s\n" "${f}"  && \
+			rm -v "${f}"
+		done
+	else
+		printf "\033[35mNo 'builds' were found!\033[0m\n"	
+	fi
+	exit 0
 }
 
 help_menu(){
@@ -44,7 +56,6 @@ help_menu(){
 	printf "Compile Action\t[ --compile ]\n"
 	exit 0
 }
-
 
 for args in $@;
 do
@@ -60,3 +71,10 @@ done
 case ${_action} in
 	compile) compile ${_progname};;
 esac
+
+
+
+
+
+
+####################	END OF SCRIPT	####################
