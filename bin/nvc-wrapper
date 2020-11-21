@@ -62,7 +62,8 @@ do
 	case $args in
 		--action=*) _action=$(printf "%s\n" $args | cut -d'=' -f2);;
 		progname:*) _progname=$(printf "%s\n" $args | cut -d':' -f2);;
-		--compile) _action='compile';;
+		--progname=*) _progname=$(printf "%s\n" $args | cut -d'=' -f2);;
+		-c|-cc|--compile) _action='compile';;
 		--flush-all) flush_all;;
 		-h|-help|--help) help_menu;;
 	esac

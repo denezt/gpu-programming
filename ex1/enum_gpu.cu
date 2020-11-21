@@ -7,10 +7,10 @@
  * and related documentation without an express license agreement from
  * NVIDIA Corporation is strictly prohibited.
  *
- * Please refer to the applicable NVIDIA end user license agreement (EULA) 
- * associated with this source code for terms and conditions that govern 
+ * Please refer to the applicable NVIDIA end user license agreement (EULA)
+ * associated with this source code for terms and conditions that govern
  * your use of this NVIDIA software.
- * 
+ *
  */
 
 
@@ -20,7 +20,10 @@ int main( void ) {
     cudaDeviceProp  prop;
 
     int count;
-    HANDLE_ERROR( cudaGetDeviceCount( &count ) );
+    
+    HANDLE_ERROR(cudaGetDeviceCount( &count ));
+    
+    
     for (int i=0; i< count; i++) {
         HANDLE_ERROR( cudaGetDeviceProperties( &prop, i ) );
         printf( "   --- General Information for device %d ---\n", i );
