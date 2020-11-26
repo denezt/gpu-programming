@@ -20,10 +20,8 @@ int main( void ) {
     cudaDeviceProp  prop;
 
     int count;
-    
     HANDLE_ERROR(cudaGetDeviceCount( &count ));
-    
-    
+
     for (int i=0; i< count; i++) {
         HANDLE_ERROR( cudaGetDeviceProperties( &prop, i ) );
         printf( "   --- General Information for device %d ---\n", i );
