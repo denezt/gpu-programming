@@ -1,1 +1,4 @@
 **/builds/**
+
+# Local Packages
+*.deb

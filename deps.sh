@@ -1,13 +1,10 @@
 #!/bin/bash
 #
-#
-#
-
 
 option="${1}"
 
 error(){
-	printf "\033[35mError\t\033[31m${1}\033[0m\n"	
+	printf "\033[35mError\t\033[31m${1}\033[0m\n"
 }
 
 install(){
@@ -42,7 +39,7 @@ change_compiler(){
 	case $version in
 		8|9|10) 
 		if [ ! -z "${version}" ];
-		then			
+		then
 			for _prog in ${prog[*]}
 			do
 				if test -f "${dir}/${_prog}-${version}";
@@ -55,7 +52,7 @@ change_compiler(){
 			done
 		fi
 		;;
-		*) error "Missing or invalid target version for compiler." && [ ! -z "${version}" ] && error "Version $version is not available";;		
+		*) error "Missing or invalid target version for compiler." && [ ! -z "${version}" ] && error "Version $version is not available";;
 	esac
 	return 0
 }
@@ -75,12 +72,10 @@ help_menu(){
 	printf "\033[1;2;33mPARAMETERS\033[0m\n"
 	printf "\033[1;2;35mSet the action\t\t\033[32maction\033[0m\n"
 	printf "\033[1;2;35mSet the target version\t\033[32mversion\033[0m\n"
-	
 	printf "\n\033[1;2;33mACTIONS\033[0m\n"
 	printf "\033[1;2;35mInstall:\t\t\033[1;3;34mi, install\033[0m\n"
 	printf "\033[1;2;35mUninstall:\t\t\033[1;3;34mu, uninstall\033[0m\n"
 	printf "\033[1;2;35mChange Compilers:\t\033[1;3;34mc, cc, change-compiler\033[0m\n"
-	
 	printf "\n\033[1;2;33m\nUSAGE:\033[0m\n"
 	printf "$0 --action=install # Will Install the nvidia version\n"
 	printf "$0 --action=unstall # Will Install the nvidia version\n"
@@ -98,7 +93,7 @@ do
 done
 
 case $_action in
-	i|install) 
+	i|install)
 	install
 	configure
 	;;
@@ -106,14 +101,4 @@ case $_action in
 	c|cc|change-compiler) change_compiler "${_version}";;
 esac
 
-
-
-
 ###############		END OF SCRIPT		###############
-
-
-
-
-
-
-

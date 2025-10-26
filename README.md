@@ -23,3 +23,16 @@ $./bin/nvc-wrapper --flush-all
 ``` sh
 $./bin/nvc-wrapper --action=compile progname:NAME_OF_SOURCE
 ```
+
+### Making changes to the NVC Wrapper
+1. Open the `nvc_wrapper` script and edit the following line to match the actual location of you `nvcc` (Nvidia CUDA Compiler).
+
+``` sh
+export PATH=$PATH:/usr/local/cuda-12.2/bin
+```
+
+2. Below is an example of how we update to **cuda-12.4**.
+
+``` sh
+export PATH=$PATH:/usr/local/cuda-12.4/bin
+```

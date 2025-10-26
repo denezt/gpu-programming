@@ -45,7 +45,7 @@ int main(){
 	cudaMalloc(&d_a, bytes);
 	cudaMalloc(&d_b, bytes);
 	cudaMalloc(&d_c, bytes);
-	
+
 	// Init block and grid size
 	int block_size = 1024;
 	int grid_size = (int)ceil((float) n /block_size);
@@ -58,7 +58,7 @@ int main(){
 
 	cudaMemcpy(h_c,d_c,bytes, cudaMemcpyHostToDevice);
 
-	for(int i =0; i < n; i++){
+	for(int i = 0; i < n; i++){
 		if (h_c[i] != 3){
 			printf("ERROR!\n");
 			break;

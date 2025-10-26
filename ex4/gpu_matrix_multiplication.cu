@@ -71,14 +71,12 @@ int main() {
 	// Copy data to the device
 	cudaMemcpy(d_m, h_m, bytes, cudaMemcpyHostToDevice);
 	cudaMemcpy(d_n, h_n, bytes, cudaMemcpyHostToDevice);
-	
+
 	int threads_per_block = 16;
 	// Cuda specific parameter type (x,y,z) structs
 	dim3 block_size(threads_per_block, threads_per_block);
 	dim3 grid_size(n / block_size.x, n / block_size.y);
-
 	printf("Grid size X: %d, Grid size Y: %d\n", grid_size.x, grid_size.y);
-	
 	matrixMul<<<grid_size,block_size>>>(d_m, d_n,d_p,n);
 	matrixMul_seq(h_m, h_n, h_p_seq,n);
 

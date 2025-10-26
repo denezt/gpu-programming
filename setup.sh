@@ -1,11 +1,8 @@
 #!/bin/bash
-
-#!/bin/bash
-#
 #
 #
 
-
+driver_version=470
 option="${1}"
 
 error(){
@@ -13,28 +10,35 @@ error(){
 }
 
 install(){
-	apt-get install nvidia-utils-455 --fix-missing -y
-	apt install cuda-nvcc-10-1 --fix-missing -y
-	apt-get install cuda-drivers-455 --fix-missing -y
-	apt install nvidia-cuda-toolkit --fix-missing -y
-	apt-get install cuda --fix-missing -y
-	apt-get install cuda-drivers --fix-missing -y
+	requirements=( "nvidia-utils-${driver_version}" "cuda-nvcc-10-1" "cuda-drivers-${driver_version}" "nvidia-cuda-toolkit" "cuda" "cuda-drivers" )
+	for req in ${requirements[*]};
+	do
+		printf "\033[35mInstalling, ${req}\033[0m\n"
+		sudo apt-get install "${req}" --fix-missing -y
+	done
 	# Start NVIDIA Driver
-	prime-select nvidia
-	modprobe nvidia
+	printf "\033[36mStarting, NVIDIA Driver...\033[0m\n"
+	case "$(sudo prime-select query)" in
+		'nvidia') printf "\033[32mNvidia is already selected.\033[0m\n";;
+		*) sudo prime-select nvidia;;
+	esac
+	[ -z "$(lsmod | egrep -o 'nvidia' | head -n 1)" ] && sudo modprobe nvidia || printf "\033[32mModule nvidia is already activate.\033[0m\n"
 	# software-properties-gtk
 }
 
 uninstall(){
-	prime-select intel
-	apt-get remove gcc -y
-	apt-get remove g++ -y
-	apt-get remove nvidia-* -y
-	apt-get purge nvidia-* gcc* g++* -y
-	apt-get remove cuda* -y
-	apt-get remove nvidia-cuda-toolkit -y
-	apt-get purge nvidia-cuda-toolkit -y
-	apt autoremove -y
+	printf "\033[31mCaution, this will remove the previous install Cuda drivers and compilers!!!\033[0m\n"
+	read -p "Are you sure? [yes|no] " _confirm
+	case $_confirm in
+		y|Y|yes)
+		prime-select intel
+		apt-get remove gcc g++ nvidia-* cuda* nvidia-cuda-toolkit -y
+		apt-get purge nvidia-* gcc* g++* -y
+		apt-get purge nvidia-cuda-toolkit -y
+		apt autoremove -y
+		;;
+		*) printf "Exiting, no further execution\n";;
+	esac
 }
 
 change_compiler(){
@@ -93,8 +97,8 @@ help_menu(){
 for arg in $@
 do
 	case $arg in
-		--action=*) _action=$(echo $arg| cut -d'=' -f2);;
-		--version=*) _version=$(echo $arg| cut -d'=' -f2);;
+		--action=*) _action=$(echo $arg | cut -d'=' -f2);;
+		--version=*) _version=$(echo $arg | cut -d'=' -f2);;
 		-h|-help|--help) help_menu;;
 	esac
 done
@@ -108,17 +112,4 @@ case $_action in
 	c|cc|change-compiler) change_compiler "${_version}";;
 esac
 
-
-
-
 ###############		END OF SCRIPT		###############
-
-
-
-
-
-
-
-
-
-
