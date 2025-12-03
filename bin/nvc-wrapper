@@ -20,14 +20,8 @@ compile(){
 	then
 		printf "\033[36mProcessing compilation stack...\033[0m\n"
 		nvcc --verbose -ccbin g++ \
-		-I../../common/inc -m64 -ftz=true -gencode \
-		arch=compute_52,code=sm_52 -gencode \
-		arch=compute_60,code=sm_60 \
-		-gencode arch=compute_61,code=sm_61 \
-		-gencode arch=compute_70,code=sm_70 \
-		-gencode arch=compute_75,code=sm_75 \
-		-gencode arch=compute_80,code=sm_80 \
-		-gencode arch=compute_86,code=sm_86 \
+		-I../../common/inc -m64 -ftz=true \
+		-Xcompiler -fopenmp -O2 \
 		-gencode arch=compute_86,code=compute_86 -o \
 		"builds/${progname}" "${progname}.cu" && \
 		printf "\033[32mCompilation is complete...\033[0m\n" || \
