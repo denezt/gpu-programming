@@ -6,3 +6,6 @@
 # Local archives
 .archive/**
 .archives/**
+
+# Log files
+**/*.log

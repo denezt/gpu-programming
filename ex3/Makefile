@@ -1,5 +1,5 @@
 PRG1=gpu_vector_threads
-NVC=/usr/local/cuda-12.4/bin/nvcc
+NVC=nvcc
 
 all: clean compile test
 	@printf "Completed build for $(PRG1)\n"
