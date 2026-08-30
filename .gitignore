@@ -2,3 +2,7 @@
 
 # Local Packages
 *.deb
+
+# Local archives
+.archive/**
+.archives/**
